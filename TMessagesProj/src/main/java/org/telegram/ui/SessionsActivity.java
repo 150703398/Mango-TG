@@ -129,6 +129,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     private boolean highlightLinkDesktopDevice;
     private boolean fragmentOpened;
+    private boolean openQrScannerOnShow;
     private Delegate delegate;
 
     public SessionsActivity(int type) {
@@ -137,6 +138,11 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     public SessionsActivity setHighlightLinkDesktopDevice() {
         this.highlightLinkDesktopDevice = true;
+        return this;
+    }
+
+    public SessionsActivity setOpenQrScanner() {
+        openQrScannerOnShow = true;
         return this;
     }
 
@@ -161,6 +167,10 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
         if (isOpen && !backward) {
             fragmentOpened = true;
+            if (openQrScannerOnShow && currentType == TYPE_DEVICES) {
+                openQrScannerOnShow = false;
+                requestCameraScan();
+            }
             for (int i = 0; i < listView.getChildCount(); i++) {
                 View ch = listView.getChildAt(i);
                 if (ch instanceof ScanQRCodeView) {
@@ -1040,16 +1050,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             buttonTextView.setTextColor(Theme.getColor(Theme.key_featuredStickers_buttonText));
             buttonTextView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(dp(24), Theme.getColor(Theme.key_featuredStickers_addButton), Theme.getColor(Theme.key_featuredStickers_addButtonPressed)));
 
-            buttonTextView.setOnClickListener(view -> {
-                if (getParentActivity() == null) {
-                    return;
-                }
-                if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                    getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, ActionIntroActivity.CAMERA_PERMISSION_REQUEST_CODE);
-                    return;
-                }
-                openCameraScanActivity();
-            });
+            buttonTextView.setOnClickListener(view -> requestCameraScan());
             addView(buttonTextView, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 48, Gravity.BOTTOM, 16, 15, 16, 16));
 
             setSticker();
@@ -1115,6 +1116,15 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    private void requestCameraScan() {
+        if (getParentActivity() == null || isFinished) return;
+        if (Build.VERSION.SDK_INT >= 23 && getParentActivity().checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            getParentActivity().requestPermissions(new String[]{Manifest.permission.CAMERA}, ActionIntroActivity.CAMERA_PERMISSION_REQUEST_CODE);
+            return;
+        }
+        openCameraScanActivity();
+    }
+
     private void openCameraScanActivity() {
         openCameraScanActivity(false);
     }
@@ -1124,9 +1134,29 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
             private TLObject response = null;
             private TLRPC.TL_error error = null;
+            private volatile boolean dismissed;
+            private boolean completed;
+            private boolean resultDelivered;
+            private Runnable acceptTokenRunnable;
+            private int acceptTokenRequestId;
+
+            @Override
+            public void onDismiss() {
+                dismissed = true;
+                if (acceptTokenRunnable != null) {
+                    AndroidUtilities.cancelRunOnUIThread(acceptTokenRunnable);
+                    acceptTokenRunnable = null;
+                }
+                if (acceptTokenRequestId != 0) {
+                    getConnectionsManager().cancelRequest(acceptTokenRequestId, false);
+                    acceptTokenRequestId = 0;
+                }
+            }
 
             @Override
             public void didFindQr(String link) {
+                if (dismissed || isFinished || resultDelivered) return;
+                resultDelivered = true;
                 if (response instanceof TLRPC.TL_authorization) {
                     TLRPC.TL_authorization authorization = (TLRPC.TL_authorization) response;
                     if (((TLRPC.TL_authorization) response).password_pending) {
@@ -1141,6 +1171,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     undoView.showWithAction(0, UndoView.ACTION_QR_SESSION_ACCEPTED, response);
                 } else if (error != null) {
                     AndroidUtilities.runOnUIThread(() -> {
+                        if (isFinished) return;
                         final String text;
                         if (error.text != null && error.text.equals("AUTH_TOKEN_EXCEPTION")) {
                             text = LocaleController.getString(R.string.AccountAlreadyLoggedIn);
@@ -1154,9 +1185,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
             @Override
             public boolean processQr(String link, Runnable onLoadEnd) {
+                if (dismissed || isFinished) return false;
+                if (completed || acceptTokenRunnable != null || acceptTokenRequestId != 0) return true;
                 this.response = null;
                 this.error = null;
-                AndroidUtilities.runOnUIThread(() -> {
+                acceptTokenRunnable = () -> {
+                    acceptTokenRunnable = null;
+                    if (dismissed || isFinished) return;
                     try {
                         String code = link.substring("tg://login?token=".length());
                         code = code.replaceAll("\\/", "_");
@@ -1164,19 +1199,26 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         byte[] token = Base64.decode(code, Base64.URL_SAFE);
                         TLRPC.TL_auth_acceptLoginToken req = new TLRPC.TL_auth_acceptLoginToken();
                         req.token = token;
-                        getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                        acceptTokenRequestId = getConnectionsManager().sendRequest(req, (response, error) -> AndroidUtilities.runOnUIThread(() -> {
+                            if (dismissed || isFinished || completed) return;
+                            completed = true;
+                            acceptTokenRequestId = 0;
                             this.response = response;
                             this.error = error;
                             onLoadEnd.run();
                         }));
                     } catch (Exception e) {
+                        if (dismissed || isFinished || completed) return;
+                        completed = true;
                         FileLog.e("Failed to pass qr code auth", e);
                         AndroidUtilities.runOnUIThread(() -> {
+                            if (isFinished) return;
                             AlertsCreator.showSimpleAlert(SessionsActivity.this, LocaleController.getString(R.string.AuthAnotherClient), LocaleController.getString(R.string.ErrorOccurred));
                         });
                         onLoadEnd.run();
                     }
-                }, 750);
+                };
+                AndroidUtilities.runOnUIThread(acceptTokenRunnable, 750);
                 return true;
             }
         }, openGalleryOnShow);

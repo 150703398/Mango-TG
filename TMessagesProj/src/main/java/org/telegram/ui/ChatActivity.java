@@ -15926,6 +15926,15 @@ public class ChatActivity extends BaseFragment implements
         if (!isKeywordFilterApplicable()) {
             return;
         }
+        sponsoredMessagesAdded = false;
+        sponsoredMessagesPostsBetween = 0;
+        if (notPushedSponsoredMessages != null) {
+            notPushedSponsoredMessages.clear();
+        }
+        if (botSponsoredMessage != null) {
+            botSponsoredMessage = null;
+            updateTopPanel(false);
+        }
         clearChatData(true);
         waitingForLoad.add(lastLoadIndex);
         getMessagesController().loadMessages(dialog_id, mergeDialogId, false, AndroidUtilities.isTablet() ? 30 : 20, 0, 0, true, 0, classGuid, 0, 0, chatMode, threadMessageId, replyMaxReadId, lastLoadIndex++, isTopic);

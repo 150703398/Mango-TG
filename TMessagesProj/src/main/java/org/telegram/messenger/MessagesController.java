@@ -21208,7 +21208,8 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public SponsoredMessagesInfo getSponsoredMessages(long dialogId) {
-        if (SharedConfig.isBlockSponsoredMessagesFullEnabled()) {
+        if (SharedConfig.isBlockSponsoredMessagesFullEnabled()
+                && !KeywordMessageFilterManager.getInstance(currentAccount).isDialogWhitelisted(dialogId)) {
             sponsoredMessages.remove(dialogId);
             return null;
         }
@@ -21290,6 +21291,15 @@ public class MessagesController extends BaseController implements NotificationCe
                 posts_between = null;
             }
             AndroidUtilities.runOnUIThread(() -> {
+                // Settings can invalidate this request while its response is being decoded.
+                if (sponsoredMessages.get(dialogId) != infoFinal) {
+                    return;
+                }
+                if (SharedConfig.isBlockSponsoredMessagesFullEnabled()
+                        && !KeywordMessageFilterManager.getInstance(currentAccount).isDialogWhitelisted(dialogId)) {
+                    sponsoredMessages.remove(dialogId);
+                    return;
+                }
                 if (result == null) {
                     sponsoredMessages.remove(dialogId);
                 } else {

@@ -50,6 +50,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
@@ -1177,7 +1178,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 }
             } else if (chat != null) {
                 TLRPC.ChatFull info = parentFragment.getCurrentChatInfo();
-                newSubtitle = getChatSubtitle(chat, info, onlineCount);
+                newSubtitle = getChatSubtitle(currentAccount, chat, info, onlineCount);
             } else if (user != null) {
                 TLRPC.User newUser = MessagesController.getInstance(currentAccount).getUser(user.id);
                 if (newUser != null) {
@@ -1265,6 +1266,11 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         } else {
             lastSubtitle = newSubtitle;
         }
+    }
+
+    public static CharSequence getChatSubtitle(int account, TLRPC.Chat chat, TLRPC.ChatFull info, int onlineCount) {
+        String localMembers = SharedConfig.getLocalChannelDisplayMembers(account, chat);
+        return TextUtils.isEmpty(localMembers) ? getChatSubtitle(chat, info, onlineCount) : localMembers;
     }
 
     public static CharSequence getChatSubtitle(TLRPC.Chat chat, TLRPC.ChatFull info, int onlineCount) {

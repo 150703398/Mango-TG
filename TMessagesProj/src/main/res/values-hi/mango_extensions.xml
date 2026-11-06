@@ -188,7 +188,7 @@
     <string name="ChannelLocalDisplayEdit">चैनल डिस्प्ले को अनुकूलित करें</string>
     <string name="ChannelLocalDisplayUsernameHint">स्थानीय रूप से प्रदर्शित चैनल उपयोगकर्ता नाम</string>
     <string name="ChannelLocalDisplayMembersHint">दर्ज करें स्थानीय रूप से प्रदर्शित चैनल नंबर</string>
-    <string name="ChannelLocalDisplayInfo">दर्ज करें यह केवल आपको दिखाई देता है। यह केवल स्थानीय डेटा पृष्ठ प्रदर्शन को संशोधित करता है और चैनल के वास्तविक उपयोगकर्ता नाम या लोगों की संख्या को संशोधित नहीं करता है।</string>
+    <string name="ChannelLocalDisplayInfo">केवल आपको दिखाई देता है। इस डिवाइस पर प्रोफ़ाइल का उपयोगकर्ता नाम और प्रोफ़ाइल तथा चैट के शीर्ष पर सदस्यों की संख्या बदलता है। चैनल की वास्तविक जानकारी नहीं बदलती।</string>
     <string name="ChannelLocalDisplayUsernameLabel">स्थानीय चैनल उपयोगकर्ता नाम</string>
     <string name="InputBarTextTitle">इनपुट फ़ील्ड टेक्स्ट</string>
     <string name="InputBarTextDefault">डिफ़ॉल्ट टेक्स्ट</string>
@@ -816,9 +816,9 @@
     <string name="KeywordFilterAddWhitelist">श्वेतसूची चैट जोड़ें</string>
     <string name="KeywordFilterEnableInfo">अवरुद्ध कीवर्ड वाले संदेश निजी चैट, समूहों और चैनलों में छिपे रहेंगे। हाल के अवरुद्ध रिकॉर्ड 3 घंटे के लिए नीचे रखे गए हैं।</string>
     <string name="KeywordFilterNoKeywords">अभी तक कोई अवरुद्ध कीवर्ड नहीं जोड़ा गया। इन कीवर्ड वाले संदेश छिपा दिए जाएंगे.</string>
-    <string name="KeywordFilterNoWhitelist">श्वेतसूची वाली चैट कीवर्ड ब्लॉकिंग को ट्रिगर नहीं करेंगी।</string>
+    <string name="KeywordFilterNoWhitelist">अनुमति सूची की चैट पर कीवर्ड, ब्लॉक किए गए उपयोगकर्ता और प्रायोजित संदेश के फ़िल्टर लागू नहीं होते।</string>
     <string name="KeywordFilterUser">उपयोगकर्ता</string>
-    <string name="KeywordFilterWhitelistInfo">इस खाते से उपयोगकर्ता, समूह या चैनल चुनने के लिए जोड़ें पर टैप करें। किसी जोड़े गए आइटम को हटाने के लिए उसे देर तक दबाएँ।</string>
+    <string name="KeywordFilterWhitelistInfo">इस खाते की निजी चैट, समूह या चैनल चुनने के लिए जोड़ें पर टैप करें। इन चैट में विज्ञापन ब्लॉक करने के सभी नियम छोड़े जाते हैं। किसी प्रविष्टि को हटाने के लिए देर तक दबाएँ।</string>
     <string name="StickerMessageSizeValue">%1$d%%</string>
     <string name="TabletWidthRatioValue">%1$d%%</string>
 </resources>

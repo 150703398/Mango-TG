@@ -188,7 +188,7 @@
     <string name="ChannelLocalDisplayEdit">채널 표시 사용자 정의</string>
     <string name="ChannelLocalDisplayUsernameHint">로컬에 표시된 채널 사용자 이름을 입력하십시오.</string>
     <string name="ChannelLocalDisplayMembersHint">로컬에 표시된 채널 번호를 입력하십시오.</string>
-    <string name="ChannelLocalDisplayInfo">귀하에게만 표시됩니다. 로컬 데이터 페이지 표시만 수정하고 채널의 실제 사용자 이름이나 인원 수는 수정하지 않습니다.</string>
+    <string name="ChannelLocalDisplayInfo">본인에게만 표시됩니다. 이 기기의 프로필 사용자 이름과 프로필 및 채팅 상단의 인원 표시를 변경합니다. 채널의 실제 정보는 변경되지 않습니다.</string>
     <string name="ChannelLocalDisplayUsernameLabel">로컬 채널 사용자 이름</string>
     <string name="InputBarTextTitle">입력 필드 텍스트</string>
     <string name="InputBarTextDefault">기본 텍스트</string>
@@ -811,9 +811,9 @@
     <string name="KeywordFilterAddWhitelist">화이트리스트 채팅 추가</string>
     <string name="KeywordFilterEnableInfo">차단된 키워드가 포함된 메시지는 비공개 채팅, 그룹 및 채널에서 숨겨집니다. 최근 차단된 기록은 아래에 3시간 동안 보관됩니다.</string>
     <string name="KeywordFilterNoKeywords">아직 차단된 키워드가 추가되지 않았습니다. 해당 키워드가 포함된 메시지는 숨겨집니다.</string>
-    <string name="KeywordFilterNoWhitelist">화이트리스트에 있는 채팅은 키워드 차단을 실행하지 않습니다.</string>
+    <string name="KeywordFilterNoWhitelist">화이트리스트의 채팅에는 키워드, 차단된 사용자 및 스폰서 메시지 필터가 적용되지 않습니다.</string>
     <string name="KeywordFilterUser">사용자</string>
-    <string name="KeywordFilterWhitelistInfo">이 계정에서 사용자, 그룹 또는 채널을 선택하려면 추가를 탭하세요. 추가된 항목을 길게 누르면 삭제됩니다.</string>
+    <string name="KeywordFilterWhitelistInfo">추가를 눌러 이 계정의 개인 채팅, 그룹 또는 채널을 선택하세요. 해당 채팅에서는 모든 광고 필터를 건너뜁니다. 항목을 길게 누르면 삭제할 수 있습니다.</string>
     <string name="StickerMessageSizeValue">%1$d%%</string>
     <string name="TabletWidthRatioValue">%1$d%%</string>
 </resources>

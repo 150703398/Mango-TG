@@ -188,7 +188,7 @@
     <string name="ChannelLocalDisplayEdit">自訂頻道顯示</string>
     <string name="ChannelLocalDisplayUsernameHint">輸入本地顯示的頻道使用者名稱</string>
     <string name="ChannelLocalDisplayMembersHint">輸入本地顯示的頻道人數</string>
-    <string name="ChannelLocalDisplayInfo">僅自行可見，只修改本機資料頁顯示，不會修改頻道真實使用者名稱或人數。</string>
+    <string name="ChannelLocalDisplayInfo">僅自己可見：修改本機資料頁使用者名稱，以及資料頁和聊天頂部的人數顯示，不會修改頻道真實資訊。</string>
     <string name="ChannelLocalDisplayUsernameLabel">本機頻道使用者名稱</string>
     <string name="InputBarTextTitle">輸入列文字</string>
     <string name="InputBarTextDefault">預設文字</string>
@@ -816,9 +816,9 @@
     <string name="KeywordFilterAddWhitelist">新增白名單聊天</string>
     <string name="KeywordFilterEnableInfo">包含被封鎖關鍵字的訊息將隱藏在私人聊天、群組和頻道中。最近被屏蔽的記錄會在下面保留3小時。</string>
     <string name="KeywordFilterNoKeywords">尚未新增屏蔽關鍵字。包含這些關鍵字的郵件將會被隱藏。</string>
-    <string name="KeywordFilterNoWhitelist">白名單聊天不會觸發關鍵字攔截。</string>
+    <string name="KeywordFilterNoWhitelist">白名單中的私聊、群組和頻道不受關鍵字、封鎖使用者及贊助廣告過濾。</string>
     <string name="KeywordFilterUser">使用者</string>
-    <string name="KeywordFilterWhitelistInfo">點擊新增從此帳戶中選擇使用者、群組或頻道。長按已新增的項目可刪除。</string>
+    <string name="KeywordFilterWhitelistInfo">點擊新增可選擇目前帳號的私聊、群組或頻道；這些對話將略過全部廣告封鎖規則。長按已新增的項目可刪除。</string>
     <string name="StickerMessageSizeValue">%1$d%%</string>
     <string name="TabletWidthRatioValue">%1$d%%</string>
 </resources>

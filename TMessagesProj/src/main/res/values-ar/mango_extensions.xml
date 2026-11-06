@@ -188,7 +188,7 @@
     <string name="ChannelLocalDisplayEdit">تخصيص عرض القناة</string>
     <string name="ChannelLocalDisplayUsernameHint">أدخل اسم مستخدم القناة المعروضة محليًا</string>
     <string name="ChannelLocalDisplayMembersHint">أدخل رقم القناة المعروضة محليًا</string>
-    <string name="ChannelLocalDisplayInfo">فهو مرئي لك فقط. فهو يعدل فقط عرض صفحة البيانات المحلية ولا يعدل اسم المستخدم الحقيقي للقناة أو عدد الأشخاص.</string>
+    <string name="ChannelLocalDisplayInfo">مرئي لك فقط. يغيّر اسم المستخدم في الملف الشخصي وعدد الأعضاء في الملف الشخصي ورأس المحادثة على هذا الجهاز. لا تتغير معلومات القناة الحقيقية.</string>
     <string name="ChannelLocalDisplayUsernameLabel">اسم مستخدم القناة المحلية</string>
     <string name="InputBarTextTitle">نص حقل الإدخال</string>
     <string name="InputBarTextDefault">النص الافتراضي</string>
@@ -811,9 +811,9 @@
     <string name="KeywordFilterAddWhitelist">إضافة دردشة القائمة البيضاء</string>
     <string name="KeywordFilterEnableInfo">سيتم إخفاء الرسائل التي تحتوي على كلمات رئيسية محظورة في الدردشات والمجموعات والقنوات الخاصة. يتم الاحتفاظ بالسجلات المحظورة الأخيرة أدناه لمدة 3 ساعات.</string>
     <string name="KeywordFilterNoKeywords">لم تتم إضافة أي كلمات رئيسية محظورة حتى الآن. سيتم إخفاء الرسائل التي تحتوي على هذه الكلمات الرئيسية.</string>
-    <string name="KeywordFilterNoWhitelist">لن تؤدي الدردشات المدرجة في القائمة البيضاء إلى حظر الكلمات الرئيسية.</string>
+    <string name="KeywordFilterNoWhitelist">تُستثنى المحادثات المدرجة في القائمة البيضاء من تصفية الكلمات الرئيسية والمستخدمين المحظورين والرسائل الممولة.</string>
     <string name="KeywordFilterUser">مستخدم</string>
-    <string name="KeywordFilterWhitelistInfo">انقر فوق \"إضافة\" لاختيار المستخدمين أو المجموعات أو القنوات من هذا الحساب. اضغط لفترة طويلة على العنصر المضاف لحذفه.</string>
+    <string name="KeywordFilterWhitelistInfo">اضغط على إضافة لاختيار محادثات خاصة أو مجموعات أو قنوات لهذا الحساب. تُتجاوز جميع قواعد حظر الإعلانات في هذه المحادثات. اضغط مطولاً على عنصر لإزالته.</string>
     <string name="StickerMessageSizeValue">%1$d%%</string>
     <string name="TabletWidthRatioValue">%1$d%%</string>
 </resources>

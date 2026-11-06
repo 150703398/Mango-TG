@@ -706,6 +706,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                             }
                         })
                         .setNegativeButton(LocaleController.getString(R.string.ContactsPermissionAlertNotNow), null)
+                        .setNeutralButton(LocaleController.getString(R.string.MangoQrGallery), (dialogInterface, i) -> processOpenQrReader(true))
                         .setTopAnimation(R.raw.permission_request_camera, 72, false, Theme.getColor(Theme.key_dialogTopBackground))
                         .show();
             }
@@ -717,13 +718,17 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
     }
 
     private void processOpenQrReader() {
-        CameraScanActivity.showAsSheet(this, false, CameraScanActivity.TYPE_QR, new CameraScanActivity.CameraScanActivityDelegate() {
+        processOpenQrReader(false);
+    }
+
+    private void processOpenQrReader(boolean openGalleryOnShow) {
+        CameraScanActivity.showAsSheet(getParentActivity(), true, CameraScanActivity.TYPE_QR_LOGIN, new CameraScanActivity.CameraScanActivityDelegate() {
             @Override
             public void didFindQr(String text) {
                 finishFragment(false);
                 qrLoginDelegate.didFindQRCode(text);
             }
-        });
+        }, openGalleryOnShow);
     }
 
     public int getType() {

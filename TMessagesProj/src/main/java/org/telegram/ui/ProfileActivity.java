@@ -598,8 +598,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     private final static int delete_group = 45;
     private final static int enable_no_forwards = 46;
     private final static int disable_no_forwards = 47;
-    private final static int channel_remark = 48;
-    private final static int channel_remark_reset = 49;
     private final static int local_peer_remark = 50;
     private final static int local_peer_remark_reset = 51;
     private final static int local_premium_status_star = 52;
@@ -2757,10 +2755,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                     MediaActivity fragment = new MediaActivity(args, null);
                     fragment.setChatInfo(chatInfo);
                     presentFragment(fragment);
-                } else if (id == channel_remark) {
-                    showChannelRemarkDialog();
-                } else if (id == channel_remark_reset) {
-                    resetChannelRemark();
                 } else if (id == local_peer_remark) {
                     showPeerRemarkDialog();
                 } else if (id == local_peer_remark_reset) {
@@ -11563,7 +11557,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             CharSequence statusString;
             CharSequence profileStatusString;
             boolean profileStatusIsButton = false;
-            if (ChatObject.isChannel(chat)) {
+            String localMembers = isTopic ? "" : SharedConfig.getLocalChannelDisplayMembers(currentAccount, chat);
+            if (!TextUtils.isEmpty(localMembers)) {
+                statusString = profileStatusString = localMembers;
+            } else if (ChatObject.isChannel(chat)) {
                 if (!isTopic && (chatInfo == null || !currentChat.megagroup && (chatInfo.participants_count == 0 || ChatObject.hasAdminRights(currentChat) || chatInfo.can_view_participants))) {
                     if (currentChat.megagroup) {
                         statusString = profileStatusString = LocaleController.getString(R.string.Loading).toLowerCase();
@@ -11589,8 +11586,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         arrowString.setSpan(new ColoredImageSpan(R.drawable.arrow_newchat), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         profileStatusString = new SpannableStringBuilder(SharedConfig.getDisplayChatTitle(currentAccount, chat)).append(' ').append(arrowString);
                         profileStatusIsButton = true;
-                    } else if (!TextUtils.isEmpty(SharedConfig.getLocalChannelDisplayMembers(currentAccount, chat.id))) {
-                        statusString = profileStatusString = SharedConfig.getLocalChannelDisplayMembers(currentAccount, chat.id);
                     } else if (currentChat.megagroup) {
                         if (onlineCount > 1 && chatInfo.participants_count != 0) {
                             statusString = String.format("%s, %s", LocaleController.formatPluralString("Members", chatInfo.participants_count), LocaleController.formatPluralString("OnlineCount", Math.min(onlineCount, chatInfo.participants_count)));
@@ -11638,9 +11633,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             }
             if (copyFromChatActivity) {
                 ChatActivity chatActivity = (ChatActivity) prevFragment;
-                if (chatActivity.avatarContainer.getSubtitleTextView() instanceof SimpleTextView) {
+                if (TextUtils.isEmpty(localMembers) && chatActivity.avatarContainer.getSubtitleTextView() instanceof SimpleTextView) {
                     statusString = ((SimpleTextView) chatActivity.avatarContainer.getSubtitleTextView()).getText();
-                } else if (chatActivity.avatarContainer.getSubtitleTextView() instanceof AnimatedTextView) {
+                } else if (TextUtils.isEmpty(localMembers) && chatActivity.avatarContainer.getSubtitleTextView() instanceof AnimatedTextView) {
                     statusString = ((AnimatedTextView) chatActivity.avatarContainer.getSubtitleTextView()).getText();
                 }
                 BackupImageView fromAvatarImage = chatActivity.avatarContainer.getAvatarImageView();
@@ -11747,6 +11742,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
                 if (a == 0 && onlineTextOverride != null) {
                     onlineTextView[a].setText(onlineTextOverride);
+                } else if (!TextUtils.isEmpty(localMembers)) {
+                    onlineTextView[a].setText(localMembers);
                 } else {
                     if (copyFromChatActivity || (currentChat.megagroup && chatInfo != null && onlineCount > 0) || isTopic) {
                         onlineTextView[a].setText(a == 0 ? statusString : profileStatusString);
@@ -12030,7 +12027,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 selfUser = true;
             } else {
                 if (canSetLocalUserRemark(user)) {
-                    otherItem.addSubItem(local_peer_remark, R.drawable.msg_edit, getLocalPeerRemarkEditTitle(false));
+                    otherItem.addSubItem(local_peer_remark, R.drawable.msg_edit, getLocalPeerRemarkEditTitle());
                     if (!TextUtils.isEmpty(SharedConfig.getLocalUserRemark(currentAccount, user.id))) {
                         otherItem.addSubItem(local_peer_remark_reset, R.drawable.media_button_restore, getString(R.string.LocalProfileDisplayRestoreDefault));
                     }
@@ -12134,12 +12131,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             TLRPC.Chat chat = getMessagesController().getChat(chatId);
             hasVoiceChatItem = false;
 
-            if (canSetLocalChatRemark(chat)) {
-                otherItem.addSubItem(local_peer_remark, R.drawable.msg_edit, getLocalPeerRemarkEditTitle(true));
-                if (!TextUtils.isEmpty(SharedConfig.getLocalChannelRemark(currentAccount, chat.id))) {
-                    otherItem.addSubItem(local_peer_remark_reset, R.drawable.media_button_restore, getString(R.string.LocalProfileDisplayRestoreDefault));
-                }
-            }
             if (canSetLocalChatBio(chat)) {
                 otherItem.addSubItem(local_profile_bio, R.drawable.msg_edit, getString(R.string.LocalProfileBioEdit));
                 if (!TextUtils.isEmpty(SharedConfig.getLocalChatBio(currentAccount, chat.id))) {
@@ -12201,10 +12192,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                     }
                 } else {
-                    otherItem.addSubItem(channel_remark, R.drawable.msg_edit, getLocalChannelRemarkEditTitle());
-                    if (!TextUtils.isEmpty(SharedConfig.getLocalChannelRemark(currentAccount, chat.id))) {
-                        otherItem.addSubItem(channel_remark_reset, R.drawable.media_button_restore, LocaleController.getString(R.string.ChannelRemarkReset));
-                    }
                     otherItem.addSubItem(local_channel_display, R.drawable.msg_customize, getLocalChannelDisplayEditTitle());
                     if (SharedConfig.hasLocalChannelDisplayOverrides(currentAccount, chat.id)) {
                         otherItem.addSubItem(local_channel_display_reset, R.drawable.media_button_restore, getString(R.string.LocalProfileDisplayRestoreDefault));
@@ -13667,7 +13654,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         }
                     } else if (position == subscribersRow) {
                         if (chatInfo != null) {
-                            String localMembers = currentChat != null ? SharedConfig.getLocalChannelDisplayMembers(currentAccount, currentChat.id) : "";
+                            String localMembers = SharedConfig.getLocalChannelDisplayMembers(currentAccount, currentChat);
                             if (ChatObject.isChannel(currentChat) && !currentChat.megagroup) {
                                 textCell.setTextAndValueAndIcon(LocaleController.getString(R.string.ChannelSubscribers), TextUtils.isEmpty(localMembers) ? LocaleController.formatNumber(chatInfo.participants_count, ',') : localMembers, R.drawable.msg_groups, position != membersSectionRow - 1);
                             } else {
@@ -16288,12 +16275,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         return getString(titleResId) + " (" + getString(R.string.LocalProfileDisplayOnlyMeVisible) + ")";
     }
 
-    private boolean canSetLocalChannelRemark() {
+    private boolean canSetLocalChannelDisplay() {
         return chatId != 0 && currentChat != null && ChatObject.isChannelAndNotMegaGroup(currentChat) && !ChatObject.isMonoForum(currentChat);
-    }
-
-    private String getLocalChannelRemarkEditTitle() {
-        return getString(R.string.ChannelRemarkEdit) + " (" + getString(R.string.LocalProfileDisplayOnlyMeVisible) + ")";
     }
 
     private String getLocalChannelDisplayEditTitle() {
@@ -16308,12 +16291,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         return user != null && user.id != UserObject.REPLY_BOT && user.id != UserObject.VERIFY && !MessagesController.isSupportUser(user);
     }
 
-    private boolean canSetLocalChatRemark(TLRPC.Chat chat) {
-        return chatId != 0 && chat != null && topicId == 0 && !ChatObject.isMonoForum(chat);
-    }
-
-    private String getLocalPeerRemarkEditTitle(boolean chat) {
-        return getString(chat ? R.string.LocalProfileDisplayEditChatName : R.string.LocalProfileDisplayEditName) + " (" + getString(R.string.LocalProfileDisplayOnlyMeVisible) + ")";
+    private String getLocalPeerRemarkEditTitle() {
+        return getString(R.string.LocalProfileDisplayEditName) + " (" + getString(R.string.LocalProfileDisplayOnlyMeVisible) + ")";
     }
 
     private boolean canSetLocalUserBio(TLRPC.User user) {
@@ -16452,33 +16431,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private boolean showPeerRemarkOptions(View view) {
-        final boolean isChat = chatId != 0;
-        if (getParentActivity() == null || isChat && !canSetLocalChatRemark(currentChat) || !isChat && !canSetLocalUserRemark(getMessagesController().getUser(userId))) {
+        TLRPC.User user = getMessagesController().getUser(userId);
+        if (getParentActivity() == null || chatId != 0 || !canSetLocalUserRemark(user)) {
             return false;
         }
         final View cell = view instanceof ProfileChannelCell ? ((ProfileChannelCell) view).dialogCell : view;
         ItemOptions itemOptions = ItemOptions.makeOptions(this, cell);
         itemOptions.setGravity(Gravity.LEFT);
-        itemOptions.add(R.drawable.msg_edit, getLocalPeerRemarkEditTitle(isChat), this::showPeerRemarkDialog);
-        if (!isChat) {
-            itemOptions.add(R.drawable.menu_profile_colors, getString(R.string.LocalUserNameColorEdit), this::showLocalUserNameColorDialog);
-        }
-        boolean hasRemark;
-        if (isChat) {
-            TLRPC.Chat chat = currentChat != null ? currentChat : getMessagesController().getChat(chatId);
-            hasRemark = chat != null && !TextUtils.isEmpty(SharedConfig.getLocalChannelRemark(currentAccount, chat.id));
-        } else {
-            TLRPC.User user = getMessagesController().getUser(userId);
-            hasRemark = user != null && !TextUtils.isEmpty(SharedConfig.getLocalUserRemark(currentAccount, user.id));
-        }
-        if (hasRemark) {
+        itemOptions.add(R.drawable.msg_edit, getLocalPeerRemarkEditTitle(), this::showPeerRemarkDialog);
+        itemOptions.add(R.drawable.menu_profile_colors, getString(R.string.LocalUserNameColorEdit), this::showLocalUserNameColorDialog);
+        if (!TextUtils.isEmpty(SharedConfig.getLocalUserRemark(currentAccount, user.id))) {
             itemOptions.add(R.drawable.media_button_restore, getString(R.string.LocalProfileDisplayRestoreDefault), this::resetPeerRemark);
         }
-        if (!isChat) {
-            TLRPC.User user = getMessagesController().getUser(userId);
-            if (user != null && SharedConfig.getLocalUserNameColor(currentAccount, user.id) != 0) {
-                itemOptions.add(R.drawable.media_button_restore, getString(R.string.LocalUserNameColorRestore), this::resetLocalUserNameColor);
-            }
+        if (SharedConfig.getLocalUserNameColor(currentAccount, user.id) != 0) {
+            itemOptions.add(R.drawable.media_button_restore, getString(R.string.LocalUserNameColorRestore), this::resetLocalUserNameColor);
         }
         itemOptions.addGap();
         itemOptions.addText(getString(R.string.LocalProfileDisplayOnlyMeVisible), 13, AndroidUtilities.dp(220));
@@ -16604,24 +16570,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (context == null) {
             return;
         }
-        final boolean isChat = chatId != 0;
-        final long peerId;
-        final String currentValue;
-        if (isChat) {
-            TLRPC.Chat chat = currentChat != null ? currentChat : getMessagesController().getChat(chatId);
-            if (!canSetLocalChatRemark(chat)) {
-                return;
-            }
-            peerId = chat.id;
-            currentValue = SharedConfig.getLocalChannelRemark(currentAccount, peerId);
-        } else {
-            TLRPC.User user = getMessagesController().getUser(userId);
-            if (!canSetLocalUserRemark(user)) {
-                return;
-            }
-            peerId = user.id;
-            currentValue = SharedConfig.getLocalUserRemark(currentAccount, peerId);
+        TLRPC.User user = getMessagesController().getUser(userId);
+        if (chatId != 0 || !canSetLocalUserRemark(user)) {
+            return;
         }
+        final long peerId = user.id;
+        final String currentValue = SharedConfig.getLocalUserRemark(currentAccount, peerId);
 
         FrameLayout container = new FrameLayout(context);
         container.setPadding(AndroidUtilities.dp(24), AndroidUtilities.dp(8), AndroidUtilities.dp(24), 0);
@@ -16645,16 +16599,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         container.addView(editText, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.FILL_HORIZONTAL));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context, resourcesProvider);
-        builder.setTitle(getString(isChat ? R.string.LocalProfileDisplayEditChatName : R.string.LocalProfileDisplayEditName));
+        builder.setTitle(getString(R.string.LocalProfileDisplayEditName));
         builder.setMessage(getString(R.string.LocalProfileDisplayInfo));
         builder.setView(container);
         builder.setPositiveButton(getString(R.string.Save), (dialog, which) -> {
-            if (isChat) {
-                SharedConfig.setLocalChannelRemark(currentAccount, peerId, editText.getText().toString());
-            } else {
-                SharedConfig.setLocalUserRemark(currentAccount, peerId, editText.getText().toString());
-            }
-            refreshPeerRemark(isChat);
+            SharedConfig.setLocalUserRemark(currentAccount, peerId, editText.getText().toString());
+            refreshPeerRemark();
         });
         if (!TextUtils.isEmpty(currentValue)) {
             builder.setNeutralButton(getString(R.string.LocalProfileDisplayRestoreDefault), (dialog, which) -> resetPeerRemark());
@@ -16668,97 +16618,23 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void resetPeerRemark() {
-        if (chatId != 0) {
-            TLRPC.Chat chat = currentChat != null ? currentChat : getMessagesController().getChat(chatId);
-            if (!canSetLocalChatRemark(chat)) {
-                return;
-            }
-            SharedConfig.clearLocalChannelRemark(currentAccount, chat.id);
-            refreshPeerRemark(true);
-        } else {
-            TLRPC.User user = getMessagesController().getUser(userId);
-            if (!canSetLocalUserRemark(user)) {
-                return;
-            }
-            SharedConfig.clearLocalUserRemark(currentAccount, user.id);
-            refreshPeerRemark(false);
+        TLRPC.User user = getMessagesController().getUser(userId);
+        if (chatId != 0 || !canSetLocalUserRemark(user)) {
+            return;
         }
+        SharedConfig.clearLocalUserRemark(currentAccount, user.id);
+        refreshPeerRemark();
     }
 
-    private void refreshPeerRemark(boolean isChat) {
+    private void refreshPeerRemark() {
         updateProfileData(false);
         createActionBarMenu(false);
-        getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, isChat ? MessagesController.UPDATE_MASK_CHAT_NAME : MessagesController.UPDATE_MASK_NAME);
-        getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload);
-    }
-
-    private void showChannelRemarkDialog() {
-        if (!canSetLocalChannelRemark()) {
-            return;
-        }
-        Context context = getParentActivity();
-        if (context == null) {
-            return;
-        }
-
-        String currentValue = SharedConfig.getLocalChannelRemark(currentAccount, currentChat.id);
-        FrameLayout container = new FrameLayout(context);
-        container.setPadding(AndroidUtilities.dp(24), AndroidUtilities.dp(8), AndroidUtilities.dp(24), 0);
-
-        EditTextBoldCursor editText = new EditTextBoldCursor(context);
-        editText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 18);
-        editText.setTextColor(Theme.getColor(Theme.key_dialogTextBlack, resourcesProvider));
-        editText.setHintTextColor(Theme.getColor(Theme.key_dialogTextHint, resourcesProvider));
-        editText.setBackgroundDrawable(Theme.createEditTextDrawable(context, true));
-        editText.setHintText(getString(R.string.ChannelRemarkHint));
-        editText.setSingleLine(true);
-        editText.setMaxLines(1);
-        editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        editText.setInputType(InputType.TYPE_CLASS_TEXT);
-        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(64)});
-        editText.setPadding(AndroidUtilities.dp(4), AndroidUtilities.dp(12), AndroidUtilities.dp(4), AndroidUtilities.dp(12));
-        if (!TextUtils.isEmpty(currentValue)) {
-            editText.setText(currentValue);
-            editText.setSelection(currentValue.length());
-        }
-        container.addView(editText, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, LayoutHelper.WRAP_CONTENT, Gravity.TOP | Gravity.FILL_HORIZONTAL));
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, resourcesProvider);
-        builder.setTitle(getString(R.string.ChannelRemarkEdit));
-        builder.setMessage(getString(R.string.ChannelRemarkInfo));
-        builder.setView(container);
-        builder.setPositiveButton(getString(R.string.Save), (dialog, which) -> {
-            SharedConfig.setLocalChannelRemark(currentAccount, currentChat.id, editText.getText().toString());
-            refreshChannelRemark();
-        });
-        if (!TextUtils.isEmpty(currentValue)) {
-            builder.setNeutralButton(getString(R.string.ChannelRemarkReset), (dialog, which) -> resetChannelRemark());
-        }
-        builder.setNegativeButton(getString(R.string.Cancel), null);
-        showDialog(builder.create());
-        AndroidUtilities.runOnUIThread(() -> {
-            editText.requestFocus();
-            AndroidUtilities.showKeyboard(editText);
-        }, 120);
-    }
-
-    private void resetChannelRemark() {
-        if (!canSetLocalChannelRemark()) {
-            return;
-        }
-        SharedConfig.clearLocalChannelRemark(currentAccount, currentChat.id);
-        refreshChannelRemark();
-    }
-
-    private void refreshChannelRemark() {
-        updateProfileData(false);
-        createActionBarMenu(false);
-        getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_CHAT_NAME);
+        getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_NAME);
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload);
     }
 
     private void showLocalChannelDisplayDialog() {
-        if (!canSetLocalChannelRemark()) {
+        if (!canSetLocalChannelDisplay()) {
             return;
         }
         Context context = getParentActivity();
@@ -16829,7 +16705,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     private void resetLocalChannelDisplay() {
-        if (!canSetLocalChannelRemark()) {
+        if (!canSetLocalChannelDisplay()) {
             return;
         }
         SharedConfig.clearLocalChannelDisplayUsername(currentAccount, currentChat.id);
@@ -16843,7 +16719,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         if (listAdapter != null) {
             listAdapter.notifyDataSetChanged();
         }
-        getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_CHAT_NAME);
+        getNotificationCenter().postNotificationName(NotificationCenter.updateInterfaces, MessagesController.UPDATE_MASK_CHAT_NAME | MessagesController.UPDATE_MASK_CHAT_MEMBERS);
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload);
     }
 

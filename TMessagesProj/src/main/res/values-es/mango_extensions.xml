@@ -188,7 +188,7 @@
     <string name="ChannelLocalDisplayEdit">Personalizar la visualización del canal</string>
     <string name="ChannelLocalDisplayUsernameHint">Ingrese el nombre de usuario del canal que se muestra localmente</string>
     <string name="ChannelLocalDisplayMembersHint">Ingrese el número del canal que se muestra localmente</string>
-    <string name="ChannelLocalDisplayInfo">Solo es visible para usted. Solo modifica la visualización de la página de datos locales y no modifica el nombre de usuario real del canal ni el número de personas.</string>
+    <string name="ChannelLocalDisplayInfo">Solo visible para ti. Cambia el nombre de usuario del perfil y el número de miembros en el perfil y la cabecera del chat en este dispositivo. La información real del canal no cambia.</string>
     <string name="ChannelLocalDisplayUsernameLabel">Nombre de usuario del canal local</string>
     <string name="InputBarTextTitle">Texto del campo de entrada</string>
     <string name="InputBarTextDefault">Texto predeterminado</string>
@@ -811,9 +811,9 @@
     <string name="KeywordFilterAddWhitelist">Agregar chat a la lista blanca</string>
     <string name="KeywordFilterEnableInfo">Los mensajes que contengan palabras clave bloqueadas se ocultarán en chats, grupos y canales privados. Los registros bloqueados recientes se mantienen a continuación durante 3 horas.</string>
     <string name="KeywordFilterNoKeywords">Aún no se han agregado palabras clave bloqueadas. Los mensajes que contengan estas palabras clave se ocultarán.</string>
-    <string name="KeywordFilterNoWhitelist">Los chats incluidos en la lista blanca no activarán el bloqueo de palabras clave.</string>
+    <string name="KeywordFilterNoWhitelist">Los chats de la lista blanca están exentos de filtros de palabras clave, usuarios bloqueados y mensajes patrocinados.</string>
     <string name="KeywordFilterUser">Usuario</string>
-    <string name="KeywordFilterWhitelistInfo">Toque Agregar para elegir usuarios, grupos o canales de esta cuenta. Mantenga presionado un elemento agregado para eliminarlo.</string>
+    <string name="KeywordFilterWhitelistInfo">Toca Añadir para elegir chats privados, grupos o canales de esta cuenta. En estos chats se omiten todos los filtros de publicidad. Mantén pulsada una entrada para eliminarla.</string>
     <string name="StickerMessageSizeValue">%1$d%%</string>
     <string name="TabletWidthRatioValue">%1$d%%</string>
 </resources>

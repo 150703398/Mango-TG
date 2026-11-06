@@ -188,7 +188,7 @@
     <string name="ChannelLocalDisplayEdit">チャンネル表示をカスタマイズします。</string>
     <string name="ChannelLocalDisplayUsernameHint">ローカルに表示されるチャンネルのユーザー名を入力します。</string>
     <string name="ChannelLocalDisplayMembersHint">ローカルに表示されるチャンネル番号を入力します。</string>
-    <string name="ChannelLocalDisplayInfo">これは、あなただけに表示されます。ローカル データ ページの表示のみが変更され、チャネルの実際のユーザー名や人数は変更されません。</string>
+    <string name="ChannelLocalDisplayInfo">自分にのみ表示されます。この端末のプロフィールのユーザー名と、プロフィールおよびチャット上部の人数表示を変更します。チャンネルの実際の情報は変更されません。</string>
     <string name="ChannelLocalDisplayUsernameLabel">ローカル チャネル ユーザー名</string>
     <string name="InputBarTextTitle">入力フィールドのテキスト</string>
     <string name="InputBarTextDefault">デフォルトのテキスト</string>
@@ -816,9 +816,9 @@
     <string name="KeywordFilterAddWhitelist">ホワイトリストチャットを追加</string>
     <string name="KeywordFilterEnableInfo">ブロックされたキーワードを含むメッセージは、プライベート チャット、グループ、チャネルで非表示になります。最近ブロックされた記録は以下に 3 時間保持されます。</string>
     <string name="KeywordFilterNoKeywords">ブロックされたキーワードはまだ追加されていません。これらのキーワードを含むメッセージは非表示になります。</string>
-    <string name="KeywordFilterNoWhitelist">ホワイトリストに登録されたチャットはキーワードのブロックをトリガーしません。</string>
+    <string name="KeywordFilterNoWhitelist">ホワイトリストのチャットには、キーワード、ブロックしたユーザー、スポンサー広告のフィルターが適用されません。</string>
     <string name="KeywordFilterUser">ユーザー</string>
-    <string name="KeywordFilterWhitelistInfo">「追加」をタップして、このアカウントからユーザー、グループ、またはチャネルを選択します。追加した項目を長押しすると削除されます。</string>
+    <string name="KeywordFilterWhitelistInfo">追加をタップして、このアカウントの個人チャット、グループ、チャンネルを選択します。選択したチャットではすべての広告フィルターを適用しません。項目を長押しすると削除できます。</string>
     <string name="StickerMessageSizeValue">%1$d%%</string>
     <string name="TabletWidthRatioValue">%1$d%%</string>
 </resources>

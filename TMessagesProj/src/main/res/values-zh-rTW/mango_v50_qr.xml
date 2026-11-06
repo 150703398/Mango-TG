@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="MangoQrLoginShortcut">掃碼登入帳號</string>
+    <string name="MangoQrScanInvalid">找不到可用的 QR 碼，請重新選擇。</string>
+</resources>

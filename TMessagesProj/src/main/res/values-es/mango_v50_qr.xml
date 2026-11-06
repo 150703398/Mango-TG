@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="MangoQrLoginShortcut">Escanear para entrar</string>
+    <string name="MangoQrScanInvalid">No se encontró ningún código QR. Elige otra imagen.</string>
+</resources>

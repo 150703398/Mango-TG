@@ -77,7 +77,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class MentionsAdapter extends RecyclerListView.SelectionAdapter implements NotificationCenter.NotificationCenterDelegate {
 
@@ -1476,16 +1475,10 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
                                             }
                                             if (peerId >= 0) {
                                                 TLRPC.User user = messagesController.getUser(peerId);
-                                                if (user == null) {
-                                                    return;
-                                                }
-                                                searchResultUsernames.add(user);
+                                                addMentionResult(searchResultUsernames, searchResultUsernamesMap, user);
                                             } else {
                                                 TLRPC.Chat chat = messagesController.getChat(-peerId);
-                                                if (chat == null) {
-                                                    return;
-                                                }
-                                                searchResultUsernames.add(chat);
+                                                addMentionResult(searchResultUsernames, searchResultUsernamesMap, chat);
                                             }
                                         }
                                     }
@@ -1493,7 +1486,9 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
                                 notifyDataSetChanged();
                                 delegate.needChangePanelVisibility(!searchResultUsernames.isEmpty());
                             }
-                            channelReqId = 0;
+                            if (currentReqId == channelLastReqId) {
+                                channelReqId = 0;
+                            }
                         }));
                     }
                 }, 200);
@@ -1613,20 +1608,40 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter implement
         }
     }
 
+    private boolean addMentionResult(ArrayList<TLObject> results, LongSparseArray<TLObject> peers, TLObject object) {
+        final long peerId;
+        if (object instanceof TLRPC.User) {
+            TLRPC.User user = (TLRPC.User) object;
+            if (!allowBots && (user.bot || UserObject.isService(user.id))) {
+                return false;
+            }
+            peerId = user.id;
+        } else if (object instanceof TLRPC.Chat) {
+            if (!allowChats) {
+                return false;
+            }
+            peerId = -((TLRPC.Chat) object).id;
+        } else {
+            return false;
+        }
+        if (peerId == 0 || peers.indexOfKey(peerId) >= 0) {
+            return false;
+        }
+        peers.put(peerId, object);
+        results.add(object);
+        return true;
+    }
+
     private void showUsersResult(ArrayList<TLObject> newResult, LongSparseArray<TLObject> newMap, boolean notify) {
-        searchResultUsernames = newResult;
-        if ((!allowBots || !allowChats) && searchResultUsernames != null) {
-            Iterator<TLObject> i = searchResultUsernames.iterator();
-            while (i.hasNext()) {
-                TLObject obj = i.next();
-                if (obj instanceof TLRPC.Chat && !allowChats) {
-                    i.remove();
-                } else if (obj instanceof TLRPC.User && (((TLRPC.User) obj).bot || UserObject.isService(((TLRPC.User) obj).id))) {
-                    i.remove();
-                }
+        // The rank map contains only some local matches; build the deduplication
+        // map from every displayed peer before merging server participants.
+        searchResultUsernames = new ArrayList<>();
+        searchResultUsernamesMap = new LongSparseArray<>();
+        if (newResult != null) {
+            for (TLObject object : newResult) {
+                addMentionResult(searchResultUsernames, searchResultUsernamesMap, object);
             }
         }
-        searchResultUsernamesMap = newMap;
         if (cancelDelayRunnable != null) {
             AndroidUtilities.cancelRunOnUIThread(cancelDelayRunnable);
             cancelDelayRunnable = null;

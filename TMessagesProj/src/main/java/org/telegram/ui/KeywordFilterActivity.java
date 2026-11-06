@@ -124,23 +124,6 @@ public class KeywordFilterActivity extends BaseFragment {
         items.add(UItem.asSwitch(ITEM_ID_BLOCK_SPONSORED_MESSAGES_FULL, getString(R.string.BlockSponsoredMessagesFull)).setChecked(SharedConfig.isBlockSponsoredMessagesFullEnabled()));
         items.add(UItem.asShadow(getString(R.string.KeywordFilterEnableInfo)));
 
-        items.add(UItem.asHeader(getString(R.string.KeywordFilterKeywords)));
-        items.add(UItem.asButton(ITEM_ID_ADD_KEYWORD, "+ " + getString(R.string.KeywordFilterAddKeyword)).accent());
-        if (keywords.isEmpty()) {
-            items.add(UItem.asShadow(getString(R.string.KeywordFilterNoKeywords)));
-        } else {
-            for (int i = 0; i < keywords.size(); i++) {
-                UItem item;
-                if (keywordSelectionMode) {
-                    item = UItem.asRoundCheckbox(ITEM_ID_KEYWORD, keywords.get(i)).setChecked(selectedKeywords.contains(keywords.get(i)));
-                } else {
-                    item = UItem.asSettingsCell(ITEM_ID_KEYWORD, keywords.get(i), getString(R.string.KeywordFilterKeywordRowHint));
-                }
-                item.object = keywords.get(i);
-                items.add(item);
-            }
-        }
-
         items.add(UItem.asHeader(getString(R.string.KeywordFilterWhitelist)));
         items.add(UItem.asButton(ITEM_ID_ADD_WHITELIST, "+ " + getString(R.string.KeywordFilterAddWhitelist)).accent());
         if (whitelistDialogs.isEmpty()) {
@@ -160,6 +143,23 @@ public class KeywordFilterActivity extends BaseFragment {
                 items.add(item);
             }
             items.add(UItem.asShadow(getString(R.string.KeywordFilterWhitelistInfo)));
+        }
+
+        items.add(UItem.asHeader(getString(R.string.KeywordFilterKeywords)));
+        items.add(UItem.asButton(ITEM_ID_ADD_KEYWORD, "+ " + getString(R.string.KeywordFilterAddKeyword)).accent());
+        if (keywords.isEmpty()) {
+            items.add(UItem.asShadow(getString(R.string.KeywordFilterNoKeywords)));
+        } else {
+            for (int i = 0; i < keywords.size(); i++) {
+                UItem item;
+                if (keywordSelectionMode) {
+                    item = UItem.asRoundCheckbox(ITEM_ID_KEYWORD, keywords.get(i)).setChecked(selectedKeywords.contains(keywords.get(i)));
+                } else {
+                    item = UItem.asSettingsCell(ITEM_ID_KEYWORD, keywords.get(i), getString(R.string.KeywordFilterKeywordRowHint));
+                }
+                item.object = keywords.get(i);
+                items.add(item);
+            }
         }
 
         items.add(UItem.asHeader(getString(R.string.KeywordFilterLogs)));
@@ -207,7 +207,6 @@ public class KeywordFilterActivity extends BaseFragment {
             case ITEM_ID_BLOCK_SPONSORED_MESSAGES_FULL: {
                 boolean enabled = !SharedConfig.isBlockSponsoredMessagesFullEnabled();
                 SharedConfig.setBlockSponsoredMessagesFullEnabled(enabled);
-                getMessagesController().clearSponsoredMessagesCache();
                 if (view instanceof TextCheckCell2) {
                     ((TextCheckCell2) view).setChecked(enabled);
                 }
@@ -369,6 +368,7 @@ public class KeywordFilterActivity extends BaseFragment {
                 return dids != null && !dids.isEmpty();
             }
         };
+        fragment.setCurrentAccount(currentAccount);
         fragment.setDelegate((dialogsActivity, dids, message, param, notify, scheduleDate, scheduleRepeatPeriod, topicsFragment) -> {
             ArrayList<KeywordMessageFilterManager.WhitelistDialog> dialogs = new ArrayList<>();
             for (int i = 0; i < dids.size(); i++) {

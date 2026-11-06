@@ -194,6 +194,11 @@ public class KeywordMessageFilterManager {
         return new ArrayList<>(whitelistDialogs);
     }
 
+    public synchronized boolean isDialogWhitelisted(long dialogId) {
+        ensureLoaded();
+        return dialogId != 0 && isWhitelistedLocked(dialogId);
+    }
+
     public synchronized ArrayList<LogEntry> getLogs() {
         ensureLoaded();
         if (purgeExpiredLogsLocked()) {
@@ -395,10 +400,13 @@ public class KeywordMessageFilterManager {
         String matchedKeyword;
         synchronized (this) {
             ensureLoaded();
+            if (isWhitelistedLocked(dialogId)) {
+                return null;
+            }
             matchedKeyword = findMatchingBlockedUsernameLocked(messageObject);
             if (matchedKeyword != null) {
                 matchedKeyword = isLong(matchedKeyword) ? matchedKeyword : "@" + matchedKeyword;
-            } else if (!enabled || keywords.isEmpty() && (!remoteUpdatesEnabled || remoteKeywords.isEmpty()) || isWhitelistedLocked(dialogId)) {
+            } else if (!enabled || keywords.isEmpty() && (!remoteUpdatesEnabled || remoteKeywords.isEmpty())) {
                 return null;
             } else if (TextUtils.isEmpty(sourceText)) {
                 return null;
@@ -418,7 +426,8 @@ public class KeywordMessageFilterManager {
         }
         synchronized (this) {
             ensureLoaded();
-            return findMatchingBlockedUsernameLocked(messageObject) != null;
+            return !isWhitelistedLocked(messageObject.getDialogId())
+                    && findMatchingBlockedUsernameLocked(messageObject) != null;
         }
     }
 
@@ -1024,9 +1033,10 @@ public class KeywordMessageFilterManager {
     }
 
     private void notifySettingsChanged() {
-        AndroidUtilities.runOnUIThread(() ->
-                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.keywordFilterSettingsUpdated)
-        );
+        AndroidUtilities.runOnUIThread(() -> {
+            MessagesController.getInstance(currentAccount).clearSponsoredMessagesCache();
+            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.keywordFilterSettingsUpdated);
+        });
     }
 
     private static String normalizeKeyword(String value) {

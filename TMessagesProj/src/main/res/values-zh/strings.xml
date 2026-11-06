@@ -74,7 +74,7 @@
     <string name="ChannelFirstMessage">查看最早消息</string>
     <string name="ChannelJumpToDate">选择日期查看</string>
     <string name="ChannelLocalDisplayEdit">自定义频道显示</string>
-    <string name="ChannelLocalDisplayInfo">仅自己可见，只修改本机资料页显示，不会修改频道真实用户名或人数。</string>
+    <string name="ChannelLocalDisplayInfo">仅自己可见：修改本机资料页用户名，以及资料页和聊天顶部的人数显示，不会修改频道真实信息。</string>
     <string name="ChannelLocalDisplayMembersHint">输入本地显示的频道人数</string>
     <string name="ChannelLocalDisplayUsernameHint">输入本地显示的频道用户名</string>
     <string name="ChannelLocalDisplayUsernameLabel">本地频道用户名</string>
@@ -127,9 +127,9 @@
     <string name="KeywordFilterBlockedUsersInfo">命中的用户发言会在本机隐藏。支持 @username、username 或纯数字用户 ID。</string>
     <string name="KeywordFilterBlockedUsersSummary">%1$d 个用户</string>
     <string name="KeywordFilterEnableInfo">私聊、群聊和频道中命中关键词的消息都会被隐藏，最近 3 小时的拦截记录会显示在下方日志里。</string>
-    <string name="KeywordFilterNoWhitelist">白名单里的私聊、群聊或频道不会触发关键词屏蔽。</string>
+    <string name="KeywordFilterNoWhitelist">白名单里的私聊、群聊和频道不受关键词、屏蔽用户及赞助广告过滤。</string>
     <string name="KeywordFilterUser">用户</string>
-    <string name="KeywordFilterWhitelistInfo">点击添加后可从当前账号的私聊、群聊和频道中勾选。长按已添加项可进入删除模式。</string>
+    <string name="KeywordFilterWhitelistInfo">点击添加可勾选当前账号的私聊、群聊或频道；这些会话将跳过全部广告屏蔽规则。长按已添加项可删除。</string>
     <string name="LocalPhoneDisplayHint">随便输入显示内容</string>
     <string name="LocalPhoneDisplayInfo">这里只修改本机显示效果，不会修改 Telegram 账号真实手机号。</string>
     <string name="LocalPhoneDisplayRestore">恢复手机号</string>

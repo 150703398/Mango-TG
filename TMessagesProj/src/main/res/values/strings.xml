@@ -2608,7 +2608,7 @@
     <string name="ChannelLocalDisplayEdit">Customize the channel display</string>
     <string name="ChannelLocalDisplayUsernameHint">Enter the locally displayed channel user name</string>
     <string name="ChannelLocalDisplayMembersHint">Enter a member count to display locally</string>
-    <string name="ChannelLocalDisplayInfo">Changes only the channel profile on this device. Its real username and member count are unchanged.</string>
+    <string name="ChannelLocalDisplayInfo">Only visible to you. Changes the channel username on its profile and the member count on its profile and chat header on this device. The real channel information is unchanged.</string>
     <string name="ChannelLocalDisplayUsernameLabel">Local channel user name</string>
     <string name="InputBarTextTitle">Input field hint</string>
     <string name="InputBarTextDefault">Default text</string>
@@ -2700,8 +2700,8 @@
     <string name="KeywordFilterNoKeywords">No blocked keywords added yet. Messages containing these keywords will be hidden.</string>
     <string name="KeywordFilterWhitelist">Whitelist</string>
     <string name="KeywordFilterAddWhitelist">Add whitelist chat</string>
-    <string name="KeywordFilterNoWhitelist">Whitelisted chats will not trigger keyword blocking.</string>
-    <string name="KeywordFilterWhitelistInfo">Tap add to choose users, groups, or channels from this account. Long press an added item to delete it.</string>
+    <string name="KeywordFilterNoWhitelist">Whitelisted chats are exempt from keyword, blocked-user, and sponsored-message filtering.</string>
+    <string name="KeywordFilterWhitelistInfo">Tap add to choose private chats, groups, or channels for this account. All ad filtering is skipped in these chats. Long press an entry to remove it.</string>
     <string name="KeywordFilterChannel">Channel</string>
     <string name="KeywordFilterGroup">Group chat</string>
     <string name="KeywordFilterUser">User</string>

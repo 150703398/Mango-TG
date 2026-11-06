@@ -188,7 +188,7 @@
     <string name="ChannelLocalDisplayEdit">Personnaliser l\'affichage du canal</string>
     <string name="ChannelLocalDisplayUsernameHint">Entrez le nom d\'utilisateur du canal affiché localement</string>
     <string name="ChannelLocalDisplayMembersHint">Entrez le numéro de canal affiché localement</string>
-    <string name="ChannelLocalDisplayInfo">Il n\'est visible que par vous. Il modifie uniquement l\'affichage de la page de données locales et ne modifie pas le véritable nom d\'utilisateur de la chaîne ni le nombre de personnes.</string>
+    <string name="ChannelLocalDisplayInfo">Visible uniquement par vous. Modifie le nom d\'utilisateur du profil et le nombre de membres dans le profil et l\'en-tête de discussion sur cet appareil. Les informations réelles de la chaîne restent inchangées.</string>
     <string name="ChannelLocalDisplayUsernameLabel">Nom d\'utilisateur du canal local</string>
     <string name="InputBarTextTitle">Texte du champ de saisie</string>
     <string name="InputBarTextDefault">Texte par défaut</string>
@@ -816,9 +816,9 @@
     <string name="KeywordFilterAddWhitelist">Ajouter une discussion sur liste blanche</string>
     <string name="KeywordFilterEnableInfo">Les messages contenant des mots-clés bloqués seront masqués dans les discussions privées, les groupes et les chaînes. Les enregistrements bloqués récents sont conservés ci-dessous pendant 3 heures.</string>
     <string name="KeywordFilterNoKeywords">Aucun mot clé bloqué n\'a encore été ajouté. Les messages contenant ces mots-clés seront masqués.</string>
-    <string name="KeywordFilterNoWhitelist">Les discussions sur liste blanche ne déclencheront pas le blocage de mots clés.</string>
+    <string name="KeywordFilterNoWhitelist">Les discussions sur liste blanche sont exemptées des filtres de mots clés, des utilisateurs bloqués et des messages sponsorisés.</string>
     <string name="KeywordFilterUser">Utilisateur</string>
-    <string name="KeywordFilterWhitelistInfo">Appuyez sur Ajouter pour choisir des utilisateurs, des groupes ou des chaînes de ce compte. Appuyez longuement sur un élément ajouté pour le supprimer.</string>
+    <string name="KeywordFilterWhitelistInfo">Appuyez sur Ajouter pour choisir des discussions privées, des groupes ou des chaînes de ce compte. Tous les filtres publicitaires y sont ignorés. Appuyez longuement sur une entrée pour la supprimer.</string>
     <string name="StickerMessageSizeValue">%1$d%%</string>
     <string name="TabletWidthRatioValue">%1$d%%</string>
 </resources>

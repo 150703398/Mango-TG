@@ -188,7 +188,7 @@
     <string name="ChannelLocalDisplayEdit">Özel kanal ekranı</string>
     <string name="ChannelLocalDisplayUsernameHint">Yerel olarak görüntülenen kanal kullanıcı adını girin</string>
     <string name="ChannelLocalDisplayMembersHint">Yerel olarak görüntülenen kanaldaki kişi sayısını girin</string>
-    <string name="ChannelLocalDisplayInfo">Yalnızca sizin tarafınızdan görülebilir. Yalnızca yerel profil sayfası görünümünü değiştirir ve kanalın gerçek kullanıcı adını veya kişi sayısını değiştirmez.</string>
+    <string name="ChannelLocalDisplayInfo">Yalnızca siz görebilirsiniz. Bu cihazda profildeki kullanıcı adını, profil ve sohbet başlığındaki üye sayısını değiştirir. Kanalın gerçek bilgileri değişmez.</string>
     <string name="ChannelLocalDisplayUsernameLabel">Yerel kanal kullanıcı adı</string>
     <string name="InputBarTextTitle">Giriş alanı metni</string>
     <string name="InputBarTextDefault">Varsayılan metin</string>
@@ -816,9 +816,9 @@
     <string name="KeywordFilterAddWhitelist">Beyaz liste sohbeti ekle</string>
     <string name="KeywordFilterEnableInfo">Engellenen anahtar kelimeleri içeren mesajlar özel sohbetlerde, gruplarda ve kanallarda gizlenecektir. Son zamanlarda bloke edilen kayıtlar 3 saat süreyle aşağıda tutulur.</string>
     <string name="KeywordFilterNoKeywords">Henüz engellenen anahtar kelime eklenmedi. Bu anahtar kelimeleri içeren mesajlar gizlenecektir.</string>
-    <string name="KeywordFilterNoWhitelist">Beyaz listeye alınan sohbetler anahtar kelime engellemeyi tetiklemez.</string>
+    <string name="KeywordFilterNoWhitelist">Beyaz listedeki sohbetler anahtar kelime, engellenen kullanıcı ve sponsorlu mesaj filtrelerinden muaftır.</string>
     <string name="KeywordFilterUser">Kullanıcı</string>
-    <string name="KeywordFilterWhitelistInfo">Bu hesaptaki kullanıcıları, grupları veya kanalları seçmek için ekle\'ye dokunun. Silmek için eklenen bir öğeye uzun basın.</string>
+    <string name="KeywordFilterWhitelistInfo">Bu hesap için özel sohbetler, gruplar veya kanallar seçmek üzere Ekle seçeneğine dokunun. Bu sohbetlerde tüm reklam filtreleri atlanır. Bir kaydı kaldırmak için basılı tutun.</string>
     <string name="StickerMessageSizeValue">%1$d%%</string>
     <string name="TabletWidthRatioValue">%1$d%%</string>
 </resources>

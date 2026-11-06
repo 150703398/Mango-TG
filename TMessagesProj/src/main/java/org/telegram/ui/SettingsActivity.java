@@ -203,6 +203,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
     @Override
     public boolean onFragmentCreate() {
+        restoreAccountsExpanded();
         getNotificationCenter().addObserver(this, NotificationCenter.updateInterfaces);
         getNotificationCenter().addObserver(this, NotificationCenter.starBalanceUpdated);
         getNotificationCenter().addObserver(this, NotificationCenter.newSuggestionsAvailable);
@@ -500,6 +501,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     @Override
     public void onResume() {
         super.onResume();
+        restoreAccountsExpanded();
         if (contentView != null) {
             updateColors();
         }
@@ -628,13 +630,25 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     private static final int ITEM_ID_ADD_ACCOUNT = 26;
     private static final int ITEM_ID_TOGGLE_ACCOUNTS = 27;
     private static final int ITEM_ID_DEVICE_INFO = 28;
+    private static final String PREF_ACCOUNTS_EXPANDED = "mango_settings_accounts_expanded";
 
     private ArrayList<Integer> accountNumbers = new ArrayList<>();
     private boolean accountsExpanded;
     private AccountSectionView accountSectionView;
 
+    private void restoreAccountsExpanded() {
+        boolean expanded = MessagesController.getGlobalMainSettings().getBoolean(PREF_ACCOUNTS_EXPANDED, false);
+        if (accountsExpanded != expanded) {
+            accountsExpanded = expanded;
+            if (listView != null) {
+                listView.adapter.update(false);
+            }
+        }
+    }
+
     private void toggleAccountsExpanded() {
         accountsExpanded = !accountsExpanded;
+        MessagesController.getGlobalMainSettings().edit().putBoolean(PREF_ACCOUNTS_EXPANDED, accountsExpanded).apply();
         if (listView != null) {
             listView.adapter.update(true);
         }

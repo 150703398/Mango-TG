@@ -67,7 +67,6 @@ public class SharedConfig {
     private static final String PREF_LOCAL_USER_PREMIUM_STATUS_PREFIX = "local_user_premium_status_";
     private static final String PREF_LOCAL_USER_EMOJI_STATUS_PREFIX = "local_user_emoji_status_";
     private static final String PREF_LOCAL_USER_BIO_PREFIX = "local_user_bio_";
-    private static final String PREF_LOCAL_CHANNEL_REMARK_PREFIX = "local_channel_remark_";
     private static final String PREF_LOCAL_CHAT_BIO_PREFIX = "local_chat_bio_";
     private static final String PREF_LOCAL_CHANNEL_DISPLAY_USERNAME_PREFIX = "local_channel_display_username_";
     private static final String PREF_LOCAL_CHANNEL_DISPLAY_MEMBERS_PREFIX = "local_channel_display_members_";
@@ -176,10 +175,6 @@ public class SharedConfig {
 
     private static String getLocalUserBioKey(int account, long userId) {
         return PREF_LOCAL_USER_BIO_PREFIX + account + "_" + userId;
-    }
-
-    private static String getLocalChannelRemarkKey(int account, long chatId) {
-        return PREF_LOCAL_CHANNEL_REMARK_PREFIX + account + "_" + chatId;
     }
 
     private static String getLocalChatBioKey(int account, long chatId) {
@@ -479,24 +474,6 @@ public class SharedConfig {
         return UserObject.getUserName(user);
     }
 
-    public static String getLocalChannelRemark(int account, long chatId) {
-        if (chatId == 0) {
-            return "";
-        }
-        return getLocalDisplayValue(getLocalChannelRemarkKey(account, chatId));
-    }
-
-    public static void setLocalChannelRemark(int account, long chatId, String remark) {
-        if (chatId == 0) {
-            return;
-        }
-        setLocalDisplayValue(getLocalChannelRemarkKey(account, chatId), remark);
-    }
-
-    public static void clearLocalChannelRemark(int account, long chatId) {
-        setLocalChannelRemark(account, chatId, null);
-    }
-
     public static String getLocalChatBio(int account, long chatId) {
         if (chatId == 0) {
             return "";
@@ -557,6 +534,13 @@ public class SharedConfig {
         return getLocalDisplayValue(getLocalChannelDisplayMembersKey(account, chatId));
     }
 
+    public static String getLocalChannelDisplayMembers(int account, TLRPC.Chat chat) {
+        if (!ChatObject.isChannelAndNotMegaGroup(chat) || ChatObject.isMonoForum(chat)) {
+            return "";
+        }
+        return getLocalChannelDisplayMembers(account, chat.id);
+    }
+
     public static void setLocalChannelDisplayMembers(int account, long chatId, String members) {
         if (chatId == 0) {
             return;
@@ -577,10 +561,6 @@ public class SharedConfig {
         if (chat == null) {
             return "";
         }
-        String remark = getLocalChannelRemark(account, chat.id);
-        if (!TextUtils.isEmpty(remark)) {
-            return remark;
-        }
         return TextUtils.isEmpty(chat.title) ? "" : chat.title;
     }
 
@@ -597,7 +577,16 @@ public class SharedConfig {
     }
 
     public static void setBlockSponsoredMessagesFullEnabled(boolean enabled) {
+        if (isBlockSponsoredMessagesFullEnabled() == enabled) {
+            return;
+        }
         MessagesController.getGlobalMainSettings().edit().putBoolean(PREF_BLOCK_SPONSORED_MESSAGES_FULL, enabled).apply();
+        AndroidUtilities.runOnUIThread(() -> {
+            for (int account : UserConfig.getActivatedAccounts()) {
+                MessagesController.getInstance(account).clearSponsoredMessagesCache();
+                NotificationCenter.getInstance(account).postNotificationName(NotificationCenter.keywordFilterSettingsUpdated);
+            }
+        });
     }
 
     private static int sanitizeSpeedMultiplier(int multiplier, int[] values) {

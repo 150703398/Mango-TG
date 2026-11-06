@@ -188,7 +188,7 @@
     <string name="ChannelLocalDisplayEdit">Personalizar a exibição do canal</string>
     <string name="ChannelLocalDisplayUsernameHint">Insira o nome de usuário do canal exibido localmente</string>
     <string name="ChannelLocalDisplayMembersHint">Insira o número do canal exibido localmente</string>
-    <string name="ChannelLocalDisplayInfo">Ele só é visível para você. Ele apenas modifica a exibição da página de dados locais e não modifica o nome de usuário real ou o número de pessoas do canal.</string>
+    <string name="ChannelLocalDisplayInfo">Visível apenas para você. Altera o nome de usuário no perfil e o número de membros no perfil e no cabeçalho da conversa neste dispositivo. As informações reais do canal não mudam.</string>
     <string name="ChannelLocalDisplayUsernameLabel">Nome de usuário do canal local</string>
     <string name="InputBarTextTitle">Texto do campo de entrada</string>
     <string name="InputBarTextDefault">Texto padrão</string>
@@ -811,9 +811,9 @@
     <string name="KeywordFilterAddWhitelist">Adicionar bate-papo à lista de permissões</string>
     <string name="KeywordFilterEnableInfo">Mensagens contendo palavras-chave bloqueadas ficarão ocultas em chats, grupos e canais privados. Os registros bloqueados recentes são mantidos abaixo por 3 horas.</string>
     <string name="KeywordFilterNoKeywords">Nenhuma palavra-chave bloqueada foi adicionada ainda. As mensagens contendo essas palavras-chave serão ocultadas.</string>
-    <string name="KeywordFilterNoWhitelist">Os bate-papos na lista de permissões não acionarão o bloqueio de palavras-chave.</string>
+    <string name="KeywordFilterNoWhitelist">Conversas na lista de permissões ficam isentas dos filtros de palavras-chave, usuários bloqueados e mensagens patrocinadas.</string>
     <string name="KeywordFilterUser">Usuário</string>
-    <string name="KeywordFilterWhitelistInfo">Toque em adicionar para escolher usuários, grupos ou canais desta conta. Pressione longamente um item adicionado para excluí-lo.</string>
+    <string name="KeywordFilterWhitelistInfo">Toque em Adicionar para escolher conversas privadas, grupos ou canais desta conta. Todos os filtros de anúncios são ignorados nessas conversas. Mantenha uma entrada pressionada para removê-la.</string>
     <string name="StickerMessageSizeValue">%1$d%%</string>
     <string name="TabletWidthRatioValue">%1$d%%</string>
 </resources>

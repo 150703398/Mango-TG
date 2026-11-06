@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="MangoQrLoginShortcut">مسح لتسجيل الدخول</string>
+    <string name="MangoQrScanInvalid">لم يتم العثور على رمز QR. اختر صورة أخرى.</string>
+</resources>

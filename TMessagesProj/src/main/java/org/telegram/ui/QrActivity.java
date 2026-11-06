@@ -788,8 +788,23 @@ public class QrActivity extends BaseFragment {
 
 
     public static void openCameraScanActivity(BaseFragment fragment) {
+        openCameraScanActivity(fragment, false);
+    }
+
+    private static void openCameraScanActivity(BaseFragment fragment, boolean openGalleryOnShow) {
         final int currentAccount = fragment.getCurrentAccount();
-        CameraScanActivity.showAsSheet(fragment, false, CameraScanActivity.TYPE_QR, new CameraScanActivity.CameraScanActivityDelegate() {
+        CameraScanActivity.showAsSheet(fragment.getParentActivity(), true, CameraScanActivity.TYPE_QR, new CameraScanActivity.CameraScanActivityDelegate() {
+            @Override
+            public Runnable getLoginAction() {
+                if (!UserConfig.getInstance(currentAccount).isClientActivated()) return null;
+                return () -> {
+                    if (fragment.isFinished || fragment.getParentActivity() == null) return;
+                    SessionsActivity sessions = new SessionsActivity(SessionsActivity.TYPE_DEVICES).setOpenQrScanner();
+                    sessions.setCurrentAccount(currentAccount);
+                    fragment.presentFragment(sessions);
+                };
+            }
+
             @Override
             public void didFindQr(String text) {
                 final String username = Browser.extractUsername(text);
@@ -814,7 +829,7 @@ public class QrActivity extends BaseFragment {
                     ).show());
                 }
             }
-        });
+        }, openGalleryOnShow);
     }
 
     @Override
@@ -838,6 +853,7 @@ public class QrActivity extends BaseFragment {
                             }
                         })
                         .setNegativeButton(LocaleController.getString(R.string.ContactsPermissionAlertNotNow), null)
+                        .setNeutralButton(LocaleController.getString(R.string.MangoQrGallery), (dialogInterface, i) -> openCameraScanActivity(this, true))
                         .setTopAnimation(R.raw.permission_request_camera, 72, false, Theme.getColor(Theme.key_dialogTopBackground))
                         .show();
             }

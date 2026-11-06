@@ -582,6 +582,8 @@
     "MangoPinnedAndRecentSearch": "v45_pinned_search.xml",
     "MangoPinnedSearchStatus": "v45_pinned_search.xml",
     "MangoPreparingFile": "v42_send_media.xml",
+    "MangoQrLoginShortcut": "mango_v50_qr.xml",
+    "MangoQrScanInvalid": "mango_v50_qr.xml",
     "MangoRecentSettings": "v42_center.xml",
     "MangoRecentSettingsInfo": "v42_center.xml",
     "MangoResetContinue": "v42_center.xml",

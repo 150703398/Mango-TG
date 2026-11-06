@@ -188,7 +188,7 @@
     <string name="ChannelLocalDisplayEdit">Настройте отображение канала</string>
     <string name="ChannelLocalDisplayUsernameHint">Введите локально отображаемое имя пользователя канала</string>
     <string name="ChannelLocalDisplayMembersHint">Введите локально отображаемый номер канала</string>
-    <string name="ChannelLocalDisplayInfo">Он виден только вам. Он только изменяет отображение локальной страницы данных и не изменяет реальное имя пользователя или количество людей на канале.</string>
+    <string name="ChannelLocalDisplayInfo">Видно только вам. Меняет имя пользователя в профиле и число участников в профиле и заголовке чата на этом устройстве. Реальные сведения о канале не меняются.</string>
     <string name="ChannelLocalDisplayUsernameLabel">Имя пользователя локального канала</string>
     <string name="InputBarTextTitle">Текст поля ввода</string>
     <string name="InputBarTextDefault">Текст по умолчанию</string>
@@ -816,9 +816,9 @@
     <string name="KeywordFilterAddWhitelist">Добавить чат в белый список</string>
     <string name="KeywordFilterEnableInfo">Сообщения, содержащие заблокированные ключевые слова, будут скрыты в приватных чатах, группах и каналах. Последние заблокированные записи хранятся ниже в течение 3 часов.</string>
     <string name="KeywordFilterNoKeywords">Заблокированные ключевые слова пока не добавлены. Сообщения, содержащие эти ключевые слова, будут скрыты.</string>
-    <string name="KeywordFilterNoWhitelist">Чаты из белого списка не вызывают блокировку ключевых слов.</string>
+    <string name="KeywordFilterNoWhitelist">Чаты из белого списка исключены из фильтрации по ключевым словам, заблокированным пользователям и рекламным сообщениям.</string>
     <string name="KeywordFilterUser">Пользователь</string>
-    <string name="KeywordFilterWhitelistInfo">Нажмите «Добавить», чтобы выбрать пользователей, группы или каналы из этой учетной записи. Нажмите и удерживайте добавленный элемент, чтобы удалить его.</string>
+    <string name="KeywordFilterWhitelistInfo">Нажмите «Добавить», чтобы выбрать личные чаты, группы или каналы этого аккаунта. Все рекламные фильтры в них отключены. Удерживайте запись, чтобы удалить её.</string>
     <string name="StickerMessageSizeValue">%1$d%%</string>
     <string name="TabletWidthRatioValue">%1$d%%</string>
 </resources>

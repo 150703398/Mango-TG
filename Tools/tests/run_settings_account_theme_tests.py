@@ -40,6 +40,8 @@ account_colors = block(account, "        public void updateColors()")
 section_attach = block(section, "        protected void onAttachedToWindow()")
 section_set = block(section, "        public void setAccounts(")
 parent_resume = block(settings, "    public void onResume()")
+restore_accounts = block(settings, "    private void restoreAccountsExpanded()")
+toggle_accounts = block(settings, "    private void toggleAccountsExpanded()")
 text_colors = block(text, "    public void updateColors()")
 gray_colors = block(gray, "    public void updateColors()")
 recycler_each = block(utilities, "    public static void forEachViews(RecyclerView recyclerView,")
@@ -200,8 +202,21 @@ class OtherColorable extends View implements Theme.Colorable {
  int updates;public void updateColors(){updates++;}
 }
 class Fragment {int resumes;public void onResume(){resumes++;}}
+class Preferences {
+ final Map<String,Boolean> values=new HashMap<>();
+ boolean getBoolean(String key,boolean fallback){return values.getOrDefault(key,fallback);}
+ Preferences edit(){return this;}
+ Preferences putBoolean(String key,boolean value){values.put(key,value);return this;}
+ void apply(){}
+}
+class MessagesController {
+ static final Preferences global=new Preferences();
+ static Preferences getGlobalMainSettings(){return global;}
+}
 public class SettingsAccountThemeRegression extends Fragment {
  static final int ACCOUNT_ROW_HEIGHT_DP=48,ACCOUNT_ACTION_ROW_HEIGHT_DP=50;
+ static final String PREF_ACCOUNTS_EXPANDED="mango_settings_accounts_expanded";
+ boolean accountsExpanded;
  static int checks;
  static void check(boolean condition,String message){checks++;if(!condition)throw new AssertionError(message);}
  static int dp(int x){return x;}
@@ -209,11 +224,14 @@ public class SettingsAccountThemeRegression extends Fragment {
  Theme.ResourcesProvider resourcesProvider;
  ActionBar actionBar=new ActionBar();View contentView=new View();
  Label titleView=new Label(),subtitleView=new Label();Search searchItem=new Search();
- View navigationBar=new View(),actionBarBackground=new View(),listView=new View();
+ View navigationBar=new View(),actionBarBackground=new View();
+ UniversalRecyclerView listView=new UniversalRecyclerView();
  AccountSectionView accountSectionView;
  int getThemedColor(int key){return Theme.getColor(key,resourcesProvider);}
  /*PARENT_COLORS*/
  /*PARENT_RESUME*/
+ /*RESTORE_ACCOUNTS*/
+ /*TOGGLE_ACCOUNTS*/
  static class AccountSectionView extends FrameLayout implements Theme.Colorable {
   final Theme.ResourcesProvider resourcesProvider;
   final FrameLayout cardContainer=new FrameLayout();
@@ -328,8 +346,31 @@ public class SettingsAccountThemeRegression extends Fragment {
   parent.contentView=null;int previous=parent.listView.invalidations;parent.onResume();
   check(parent.resumes==3&&parent.listView.invalidations==previous,"resume before view creation is null-safe and preserves superclass lifecycle");
  }
+ static void persistExpansion(){
+  MessagesController.global.values.clear();
+  SettingsAccountThemeRegression first=new SettingsAccountThemeRegression();
+  first.restoreAccountsExpanded();
+  check(!first.accountsExpanded,"first launch stays collapsed");
+  first.toggleAccountsExpanded();
+  check(first.accountsExpanded&&first.listView.adapter.updates==1,"expand immediately updates list");
+  SettingsAccountThemeRegression otherAccount=new SettingsAccountThemeRegression();
+  otherAccount.restoreAccountsExpanded();
+  check(otherAccount.accountsExpanded,"new page and account switch restore expansion");
+  otherAccount.toggleAccountsExpanded();
+  check(!otherAccount.accountsExpanded,"collapse applies immediately");
+  first.onResume();
+  check(!first.accountsExpanded,"retained page restores latest collapsed preference");
+  SettingsAccountThemeRegression recreated=new SettingsAccountThemeRegression();
+  recreated.restoreAccountsExpanded();
+  check(!recreated.accountsExpanded,"page recreation keeps explicit collapse");
+  recreated.listView=null;recreated.toggleAccountsExpanded();
+  check(MessagesController.global.getBoolean(PREF_ACCOUNTS_EXPANDED,false),"toggle persists without an attached list");
+  recreated.restoreAccountsExpanded();
+  MessagesController.global.values.clear();
+ }
  public static void main(String[] args){
   repeatedSwitches();collapseAndExpand();resourceProvidersAndAttachment();retainedPageResume();
+  persistExpansion();
   System.out.println("Settings accounts theme: "+checks+" production-method behavior assertions passed");
  }
 }
@@ -340,6 +381,7 @@ for placeholder, production in {
     "TEXT_COLORS": text_colors, "GRAY_COLORS": gray_colors,
     "ACCOUNT_COLORS": account_colors, "PARENT_COLORS": parent_colors,
     "PARENT_RESUME": parent_resume,
+    "RESTORE_ACCOUNTS": restore_accounts, "TOGGLE_ACCOUNTS": toggle_accounts,
     "SECTION_SET": section_set, "SECTION_ATTACH": section_attach,
     "SECTION_COLORS": section_colors,
 }.items():
