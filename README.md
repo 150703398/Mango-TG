@@ -7,7 +7,7 @@
 
 [![License: GPL v2](https://img.shields.io/badge/License-GPL--2.0-blue.svg)](LICENSE)
 ![Platform](https://img.shields.io/badge/Platform-Android-brightgreen)
-![Version](https://img.shields.io/badge/Version-4.9%20(7009)-orange)
+![Version](https://img.shields.io/badge/Version-5.0%20(7010)-orange)
 
 [简体中文](#-简体中文) · [English](#-english) · [源码 / Source](https://github.com/2492866096/Mango) · [版本发布 / Releases](https://github.com/2492866096/Mango/releases) · [官方频道 / Official Channel](https://t.me/hhhhp) · [修改建议 / Bug 反馈](https://t.me/zsq888)
 
@@ -37,7 +37,7 @@
 
 ### 📦 下载与版本
 
-- **当前源码版本：** `4.9 (7009)`
+- **当前源码版本：** `5.0 (7010)`
 - **Android 包名：** `app.mango.im`
 - **源码：** [GitHub · Mango](https://github.com/2492866096/Mango)
 - **APK / 版本更新：** [GitHub Releases](https://github.com/2492866096/Mango/releases)
@@ -125,7 +125,7 @@ Availability varies by release, Android version, server-side behavior, and user 
 
 ### 📦 Download & Versions
 
-- **Source version:** `4.9 (7009)`
+- **Source version:** `5.0 (7010)`
 - **Android application ID:** `app.mango.im`
 - **Source code:** [GitHub repository](https://github.com/2492866096/Mango)
 - **APK releases:** [GitHub Releases](https://github.com/2492866096/Mango/releases)
